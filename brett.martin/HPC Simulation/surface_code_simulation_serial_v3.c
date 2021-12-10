@@ -103,12 +103,12 @@ int main ( int argc, char** argv ) {
 
     // Determine the number of unique probabilities, the number of samples generated per probability
     // TODO: Comment out the following print statements after you're done debugging
-    struct s_prob prob_values[num_data_qubits * num_data_qubits];
+    struct s_prob prob_values[(num_data_qubits + 1) * (num_data_qubits + 1)];
     memset(prob_values, 0, sizeof(prob_values));
 
     int prob_count = 0;
-    for (int i = 0; i < num_data_qubits; i++) {
-        for (int j = 0; j < num_data_qubits; j++) {
+    for (int i = 0; i < num_data_qubits + 1; i++) {
+        for (int j = 0; j < num_data_qubits + 1; j++) {
             prob_values[prob_count].n_total_err = prob_count;
             prob_values[prob_count].n_x_err = i;
             prob_values[prob_count].n_z_err = j;
@@ -122,12 +122,12 @@ int main ( int argc, char** argv ) {
     printf("\n");
 
     // Sort by ascending probability and calculate cumulative probs
-    qsort((void*)prob_values, num_data_qubits * num_data_qubits, sizeof(prob_values[0]), q_comp);
+    qsort((void*)prob_values, (num_data_qubits + 1) * (num_data_qubits + 1), sizeof(prob_values[0]), q_comp);
 
     prob_count = 0;
     float cum_prob = 0.0;
-    for (int i = 0; i < num_data_qubits; i++) {
-        for (int j = 0; j < num_data_qubits; j++) {
+    for (int i = 0; i < num_data_qubits + 1; i++) {
+        for (int j = 0; j < num_data_qubits + 1; j++) {
             cum_prob += (float)(prob_values[prob_count].probability * prob_values[prob_count].count);
             prob_values[prob_count].cumulative = cum_prob;
             printf("Code with %d errors (%d x and %d z): prob: %e, count: %lu, cumulative prob: %e\n", prob_values[prob_count].n_total_err, prob_values[prob_count].n_x_err, prob_values[prob_count].n_z_err, prob_values[prob_count].probability, prob_values[prob_count].count, prob_values[prob_count].cumulative);
@@ -155,11 +155,13 @@ int main ( int argc, char** argv ) {
 
     int block_size;
 
+    return; // Temp
+
     // Begin main sim outer loop
 	while ( sample_count < block_size ) {
 
         // TODO: Figure out new errors value based on which sample to use
-		int errors = i;
+		int errors = 1;
 		double probability = 1.0;
 
         // Calculate number of errors and determine number of errors present
