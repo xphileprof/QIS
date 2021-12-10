@@ -13,21 +13,27 @@
 #include <inttypes.h>
 #define TRI_SIZE 50
 
+
+// Struct used in calculating and sorting all possible probabilities along with the number of samples per probability and the respective number of x and z errors
 struct s_prob {
     int n_x_err, n_z_err, n_total_err;
     float probability, cumulative;
     unsigned long count;    // TODO: Change to double to have higher range
 };
 
-int q_comp(const void *p1, const void *p2) {
-    float a = ((struct s_prob *)p1)->probability;
-    float b = ((struct s_prob *)p2)->probability;
+
+// Helper function passed into the quicksort algorithm to sort the struct s_prob by the probability values
+int q_comp( const void *p1, const void *p2 ) {
+    float a = ( (struct s_prob *) p1 )->probability;
+    float b = ( (struct s_prob *) p2 )->probability;
     if (a < b) { return -1; }
     else if (a > b) { return 1; }
     return 0;
 }
 
-int main (int argc, char** argv) {
+
+// Begin main function
+int main ( int argc, char** argv ) {
 
 	//Inputs:
 	const int depth = 3;		// Or code distance
@@ -39,7 +45,17 @@ int main (int argc, char** argv) {
 	//list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
 	FILE *f = fopen("D:/Documents/AFIT/Research/test.csv", "w+");
 
-    // Generate pascal's triangle for use in calculating binomial coefficients: O(n^2)
+    // Variables used in the generation of sample data
+    int num_data_qubits = depth * depth;
+	int data_qubit_x_error[ depth + 2][ depth + 2 ];
+	int data_qubit_z_error[ depth + 2  ][ depth + 2 ];
+	int ancilla_qubit_value[ depth + 1 ][ depth + 1 ];
+
+    // Parallel block decomposition variables
+    // TODO: Consider removing this
+	uint64_t total_num_iter = pow(4, num_data_qubits);			// Total number of outer loop iterations
+
+    // Generate pascal's triangle for use in calculating binomial coefficients ( time O(n^2) )
     // When referencing (n k) or "n choose k", just use: pascal_triangle[n][k]
     const int tri_size = 50;
     unsigned long pascal_triangle[ TRI_SIZE ][ TRI_SIZE ];
@@ -57,7 +73,6 @@ int main (int argc, char** argv) {
 
     // Create CSV headers
     int ancilla = 0;
-    //fprintf(f, "Probability,");
     for (int k=1; k < depth; k++) {
         if (k%2 == 0) {
             fprintf(f, "Z%d,", ancilla);
@@ -86,16 +101,8 @@ int main (int argc, char** argv) {
     }
     fprintf(f, "Labels\n");
 
-	const int num_data_qubits = depth * depth;
-	int data_qubit_x_error[ depth + 2][ depth + 2 ];
-	int data_qubit_z_error[ depth + 2  ][ depth + 2 ];
-	int ancilla_qubit_value[ depth + 1 ][ depth + 1 ];
-
-	// Parallel block decomposition variables
-	uint64_t total_num_iter = pow(4, num_data_qubits);			// Total number of outer loop iterations
-
     // Determine the number of unique probabilities, the number of samples generated per probability
-    //float prob_values[(int) pow(num_data_qubits, 2)][2];
+    // TODO: Comment out the following print statements after you're done debugging
     struct s_prob prob_values[num_data_qubits * num_data_qubits];
     memset(prob_values, 0, sizeof(prob_values));
 
@@ -114,9 +121,9 @@ int main (int argc, char** argv) {
 
     printf("\n");
 
-    // Sort by ascending probability
-    // Also, include cumulative probs
+    // Sort by ascending probability and calculate cumulative probs
     qsort((void*)prob_values, num_data_qubits * num_data_qubits, sizeof(prob_values[0]), q_comp);
+
     prob_count = 0;
     float cum_prob = 0.0;
     for (int i = 0; i < num_data_qubits; i++) {
@@ -127,11 +134,31 @@ int main (int argc, char** argv) {
             prob_count++;
         } 
     }
-    
+
+    // TODO: Determine which samples will be written to file here:
+    //      - Sample from the above struct array to find out how many samples to take for each probability
+    //      - For each probability, randomly select a configuration of the respective number of x and z errors          (Is this where I use the Fisher Yates shuffle, or is it on the prior line?)
+    //      - Write that configuration to a bit string that can be used in lieu of the 'i' variable for the first nested for loop to function properly
+    //      - Alternatively, instead of writing to the data qubit arrays using the existing method, write to them using the names of the selected qubits
+    //      - Just ask Dr. Merkle. I'm not entirely sure what would work best here. I think just writing out the bit string to replace 'i' would be the best, but it would also require me to decompose the problem differently when I rebase the code to run in parallel
+    int sample_count = 0;
+
+    /* Alternative plan: 
+     *  - Determine how many samples from each probability range I want to generate (again, ask Dr. Merkle about this)
+     *  - For each probability, randomly select where the corresponding number of x and z qubits will end up on the surface code
+     *  - Generate bit string with the surface code arrangement in the previous step where every even bit contains an x error and every odd bit contains a z error ( O(n) )
+     *  - Add this to a 2d array of size [num_samples][2]
+     *  - Decompose the list into processes and assign each entry a process (block decomposition)
+     *  - Once in the while loop, iterate over the bit strings belonging to that process (exit the loop if the bit string is not assigned to this process)
+     *  - Everything else runs as normal, but need to add communications to send samples from each process to the root process
+     */
+
+    int block_size;
 
     // Begin main sim outer loop
-	for ( int i = 0; i < total_num_iter; i++ ) {
+	while ( sample_count < block_size ) {
 
+        // TODO: Figure out new errors value based on which sample to use
 		int errors = i;
 		double probability = 1.0;
 
