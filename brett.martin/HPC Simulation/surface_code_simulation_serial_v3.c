@@ -11,14 +11,23 @@
 #include <time.h>
 #include <stdint.h>
 #include <inttypes.h>
+
 #define TRI_SIZE 50
+#define X 0
+#define Z 1
 
 
 // Struct used in calculating and sorting all possible probabilities along with the number of samples per probability and the respective number of x and z errors
 struct s_prob {
     int n_x_err, n_z_err, n_total_err;
     float probability, cumulative;
-    unsigned long count;    // TODO: Change to double to have higher range
+    unsigned long count, collected;
+};
+
+
+// Struct used to keep track of the x and z error syndrome for a given sample in the form of bit strings
+struct error_syndrome {
+    uint64_t x_syndrome, z_syndrome;
 };
 
 
@@ -49,6 +58,12 @@ void fisher_yates( int array[], int size) {
 }
 
 
+// Generate or update error syndrome in the form of a bit string
+uint64_t generate_syndrome(uint64_t bit_string, int error_type, int error_idx) {
+    return error_type ? ((uint64_t)(1 << (error_idx + 1)) | bit_string) : ((uint64_t)(1 << error_idx) | bit_string);
+}
+
+
 // Begin main function
 int main ( int argc, char** argv ) {
 
@@ -58,9 +73,12 @@ int main ( int argc, char** argv ) {
 	const float p_x_error = 0.05;
 	const float p_z_error = 0.05;
 
+    // Set this to 1 if you want the sample set to include instances where no errors exist
+    int include_no_err = 0;
+
 	//Output:
 	//list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
-	FILE *f = fopen("D:/Documents/AFIT/Research/test.csv", "w+");
+	FILE *f = fopen("D:/Documents/AFIT/Research/v3samples.csv", "w+");
 
     // Generate time-dependent seed for random number generation
     srand(time(NULL));
@@ -122,15 +140,17 @@ int main ( int argc, char** argv ) {
     struct s_prob prob_values[(num_data_qubits + 1) * (num_data_qubits + 1)];
     memset(prob_values, 0, sizeof(prob_values));
 
+    //printf("%d\n", sizeof(prob_values));
+
     int prob_count = 0;
     for (int i = 0; i < num_data_qubits + 1; i++) {
         for (int j = 0; j < num_data_qubits + 1; j++) {
-            prob_values[prob_count].n_total_err = prob_count;
+            prob_values[prob_count].n_total_err = i + j;
             prob_values[prob_count].n_x_err = i;
             prob_values[prob_count].n_z_err = j;
             prob_values[prob_count].probability = (float) pow((1.0 - p_x_error), num_data_qubits - i) * pow((1.0 - p_z_error), num_data_qubits - j) * pow(p_x_error, i) * pow(p_z_error, j);
             prob_values[prob_count].count = (unsigned long) pascal_triangle[num_data_qubits][i] * pascal_triangle[num_data_qubits][j];
-            printf("At index %d: prob: %e, count: %lu, errors: %d x and %d z\n", prob_values[prob_count].n_total_err, prob_values[prob_count].probability, prob_values[prob_count].count, prob_values[prob_count].n_x_err, prob_values[prob_count].n_z_err);
+            //printf("At index %d: prob: %e, count: %lu, errors: %d x and %d z\n", prob_values[prob_count].n_total_err, prob_values[prob_count].probability, prob_values[prob_count].count, prob_values[prob_count].n_x_err, prob_values[prob_count].n_z_err);
             prob_count++;
         }
     }
@@ -146,55 +166,109 @@ int main ( int argc, char** argv ) {
         for (int j = 0; j < num_data_qubits + 1; j++) {
             cum_prob += (float)(prob_values[prob_count].probability * prob_values[prob_count].count);
             prob_values[prob_count].cumulative = cum_prob;
-            printf("Code with %d errors (%d x and %d z): prob: %e, count: %lu, cumulative prob: %e\n", prob_values[prob_count].n_total_err, prob_values[prob_count].n_x_err, prob_values[prob_count].n_z_err, prob_values[prob_count].probability, prob_values[prob_count].count, prob_values[prob_count].cumulative);
+            //printf("Code with %d errors (%d x and %d z): prob: %e, count: %lu, cumulative prob: %e\n", prob_values[prob_count].n_total_err, prob_values[prob_count].n_x_err, prob_values[prob_count].n_z_err, prob_values[prob_count].probability, prob_values[prob_count].count, prob_values[prob_count].cumulative);
             prob_count++;
-        } 
+        }
     }
+    
+    //printf("\nGenerating samples...\n\n");
+
+    int sample_space = (num_samples > pascal_triangle[num_data_qubits + 1][num_data_qubits / 2]) ? num_samples : pascal_triangle[num_data_qubits + 1][num_data_qubits / 2];
+
+    // Consumes ~156.25 KB of heap space at max of depth=7, so this should be safe. Consider virtual mem if this becomes an issue when running on HPC
+    // Will contain which error combinations exist for each possible probability. Searching it would take O(n) later on
+    struct error_syndrome combinations[(num_data_qubits + 1) * (num_data_qubits + 1)][sample_space];
+    memset(combinations, 0, sizeof(combinations));
 
     // Begin main sim outer loop
 	for (int i = 0; i < num_samples; i++) {
 
-		// initialize data_qubit_x_error and data_qubit_z_error to be full of FALSE (or 0) values
+		// initialize data_qubit_x_error and data_qubit_z_error (and others) to be full of FALSE (or 0) values
 		memset(data_qubit_x_error, 0, sizeof(data_qubit_x_error));
 		memset(data_qubit_z_error, 0, sizeof(data_qubit_z_error));
 		memset(ancilla_qubit_value, 0, sizeof(ancilla_qubit_value));
 
-        // Begin Fisher Yates Shuffle to generate data qubit x and z errors
-        // Generate random number between 0 and 1
-        float rand_num = (rand() % RAND_MAX) / (float)RAND_MAX;
+        // If all samples must contain at least one error, lower upper bound of random function to exclude that probability range
+        int upper_prob_bound = include_no_err ? 1.0 : (1.0 - prob_values[0].cumulative);
 
-        // Find first cumulative probability value in the prob_values array that exceeds the random number
-        int sample_idx = 0;
-        for (int j = 0; j < (num_data_qubits + 1) * (num_data_qubits + 1); j++) {
-            // Index of that element is going to point to the entry in the struct array that will tell me how many of each error will occur
-            if (prob_values[j].cumulative >= rand_num) { sample_idx = j; break; }
+        // Begin Fisher Yates Shuffle to generate data qubit x and z errors
+        float rand_num;
+        int sample_idx;
+        int sample_found = 0;
+        while(!sample_found) {
+            // Generate random number between 0 and 1
+            rand_num = ((float) rand() / RAND_MAX) * upper_prob_bound;
+            sample_idx = 0;
+            for (int j = 0; j < (num_data_qubits + 1) * (num_data_qubits + 1); j++) {
+                // Index of that element is going to point to the entry in the struct array that will tell me how many of each error will occur, but only if all samples have not been generated
+                if (prob_values[j].cumulative >= rand_num && prob_values[j].count > prob_values[j].collected) {     // Check if the cumulative value is higher AND if there are enough samples to continue
+                    sample_idx = j; 
+                    prob_values[j].collected++;
+                    sample_found = 1;
+                    break;
+                }
+            }
         }
+        //printf("Sampling for probability %f from random number %f\n\n", prob_values[sample_idx].cumulative, rand_num);
 
         // Initialize array of length (num_data_qubits + 1) where each element in the array is equal to its index
         int rand_array[num_data_qubits + 1];
+
         for (int j = 0; j < num_data_qubits + 1; j++) {
             rand_array[j] = j;
         }
 
         // Do n_x_err and n_z_err iterations of the Fisher Yates Shuffle on the array (where the selected value is at index 0)
         // This will tell me the data qubits that have x errors
-        int qubit_idx;
-        for (int j = 0; j < prob_values[sample_idx].n_x_err; j++) {
-            while (1) {    // Include this logic to ensure the same error doesn't get written twice
-                fisher_yates(rand_array, num_data_qubits + 1);
-                qubit_idx = rand_array[0];
-                if (data_qubit_x_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] != 1) { break; }
+        while(1) {
+            int qubit_idx;
+            uint64_t x_syndrome_bit_string = 0;   // This value will contain alternating x and z errors (starting with x, and starting at the LSB with data qubit 0)
+            uint64_t z_syndrome_bit_string = 0;
+            //memset(data_qubit_x_error, 0, sizeof(data_qubit_x_error));
+		    //memset(data_qubit_z_error, 0, sizeof(data_qubit_z_error));
+            for (int j = 0; j < prob_values[sample_idx].n_x_err; j++) {
+                while (1) {    // Include this logic to ensure the same error doesn't get written twice
+                    fisher_yates(rand_array, num_data_qubits + 1);
+                    qubit_idx = rand_array[0];
+                    //printf("Query qubit for x error at location %d... ", qubit_idx);
+                    if (data_qubit_x_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] != 1) { break; }
+                    //printf("Failed--position already occupied by x error. Retrying...\n");
+                }
+                //printf("Done! Added x error\n");            
+                data_qubit_x_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] = 1;
+                x_syndrome_bit_string = (uint64_t)(1 << qubit_idx) | x_syndrome_bit_string;
             }
-            data_qubit_x_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] = 1;
-        }
 
-        for (int j = 0; j < prob_values[sample_idx].n_z_err; j++) {
-            while (1) {
-                fisher_yates(rand_array, num_data_qubits + 1);
-                qubit_idx = rand_array[0];
-                if (data_qubit_z_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] != 1) { break; }
+            for (int j = 0; j < prob_values[sample_idx].n_z_err; j++) {
+                while (1) {
+                    fisher_yates(rand_array, num_data_qubits + 1);
+                    qubit_idx = rand_array[0];
+                    //printf("Query qubit for z error at location %d... ", qubit_idx);
+                    if (data_qubit_z_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] != 1) { break; }
+                    //printf("Failed--position already occupied by z error. Retrying...\n");
+                }
+                //printf("Done! Added z error\n");
+                data_qubit_z_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] = 1;
+                z_syndrome_bit_string = (uint64_t)(1 << qubit_idx) | z_syndrome_bit_string;
             }
-            data_qubit_z_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] = 1;
+
+            // Check list of error syndromes to find match
+            // TODO: change this to not iterate over all elements
+            int match_found = 0;
+            for (int j = 0; j < sample_space; j++) {
+                if (combinations[sample_idx][j].x_syndrome == x_syndrome_bit_string && combinations[sample_idx][j].z_syndrome == z_syndrome_bit_string) {
+                    match_found = 1;
+                    break;
+                }
+            }
+            //printf("Collected = %d, sample index = %d, match found = %d\n", prob_values[sample_idx].collected, sample_idx, match_found);
+            
+            if (!match_found) {
+                combinations[sample_idx][prob_values[sample_idx].collected - 1].x_syndrome = x_syndrome_bit_string;
+                combinations[sample_idx][prob_values[sample_idx].collected - 1].z_syndrome = z_syndrome_bit_string;
+                break;
+            }
+
         }
 
         // Calculate ancilla qubit values
@@ -276,6 +350,8 @@ int main ( int argc, char** argv ) {
         }
         strcat(label_list, "]\"");
         fprintf(f, "%s\n", label_list);
+
+        //printf("\nAdded sample %d of %d. \n___________________________________________________________________\n", i, num_samples-1);
 
 	}
 

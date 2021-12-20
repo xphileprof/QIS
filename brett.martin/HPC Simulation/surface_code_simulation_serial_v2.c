@@ -135,20 +135,6 @@ int main (int argc, char** argv) {
 		int errors = i;
 		double probability = 1.0;
 
-        // Calculate number of errors and determine number of errors present
-        unsigned int num_x_error_bits = 0;
-        unsigned int num_z_error_bits = 0;
-        unsigned int error_bit_string = errors;
-
-        // TODO: use this to determine how many samples to take from iterations that have a certain number of errors
-        // Alternatively, write the error bitstream prior to running the outer loop and change to a while loop to reduce runtime
-        while(error_bit_string) {
-            num_x_error_bits += error_bit_string & 1;   // Every even bit will contain possible x error
-            error_bit_string >>= 1;
-            num_z_error_bits += error_bit_string & 1;   // Every odd bit will contain possible z error
-            error_bit_string >>= 1;
-        }
-
 		// initialize data_qubit_x_error and data_qubit_z_error to be full of FALSE (or 0) values
 		memset(data_qubit_x_error, 0, sizeof(data_qubit_x_error));
 		memset(data_qubit_z_error, 0, sizeof(data_qubit_z_error));

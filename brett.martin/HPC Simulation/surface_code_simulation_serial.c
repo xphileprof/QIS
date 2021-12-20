@@ -58,11 +58,9 @@ int main (int argc, char** argv) {
 	int data_qubit_z_error[ depth + 2  ][ depth + 2 ];
 	int ancilla_qubit_value[ depth + 2 ][ depth + 2 ];
 
-	// Parallel block decomposition variables
-	uint64_t total_num_iter = pow(4, num_data_qubits);			// Total number of outer loop iterations
-
-    // Used for sorting probabilities
-    
+	// Must include parallel block decomposition variables when converted to run on HPC
+    // TODO: Surface code of depth 7 exceeds this value. Find an alternate means to count the total number of loop iterations
+	uint64_t total_num_iter = (uint64_t) pow(4, num_data_qubits);			// Total number of outer loop iterations    
 
 	for ( int i = 0; i < total_num_iter; i++ ) {
 
@@ -74,6 +72,7 @@ int main (int argc, char** argv) {
 		memset(data_qubit_z_error, 0, sizeof(data_qubit_z_error));
 		memset(ancilla_qubit_value, 0, sizeof(ancilla_qubit_value));
 
+        // Set data qubit errors and calculate probabilities
 		for ( int j = 0; j < num_data_qubits; j++ ) {
 			int this_error = errors % 2;
 			data_qubit_x_error[ ( j / depth ) + 1][ ( j % depth ) + 1 ] = this_error;
@@ -86,39 +85,35 @@ int main (int argc, char** argv) {
 			probability *= this_error ? p_z_error : (1.0 - p_z_error);
 		}
 
-		for ( int j = 0; j < pow( (depth + 1 ), 2) - 1; j++ ) {
-			ancilla_qubit_value[ j / depth ][ j % depth ] = 
-				  data_qubit_x_error[   j / depth       ][   j % depth       ]
-				^ data_qubit_x_error[   j / depth       ][ ( j % depth ) + 1 ]
-				^ data_qubit_x_error[ ( j / depth ) + 1 ][   j % depth       ]
-				^ data_qubit_x_error[ ( j / depth ) + 1 ][ ( j % depth ) + 1 ];
-			j++;
-			ancilla_qubit_value[ j / depth ][ j % depth ] = 
-				  data_qubit_z_error[   j / depth       ][   j % depth       ]
-				^ data_qubit_z_error[   j / depth       ][ ( j % depth ) + 1 ]
-				^ data_qubit_z_error[ ( j / depth ) + 1 ][   j % depth       ]
-				^ data_qubit_z_error[ ( j / depth ) + 1 ][ ( j % depth ) + 1 ];
+
+		for ( int j = 0; j < (depth + 1 ) * (depth + 1 ) - 1; j++ ) {
+            if ((j/(depth+1))%2 == 0) {
+                ancilla_qubit_value[ j / (depth+1) ][ j % (depth+1) ] = 
+                    data_qubit_x_error[   j / (depth+1)       ][   j % (depth+1)       ]
+                    ^ data_qubit_x_error[   j / (depth+1)       ][ ( j % (depth+1) ) + 1 ]
+                    ^ data_qubit_x_error[ ( j / (depth+1) ) + 1 ][   j % (depth+1)       ]
+                    ^ data_qubit_x_error[ ( j / (depth+1) ) + 1 ][ ( j % (depth+1) ) + 1 ];
+                j++;
+                ancilla_qubit_value[ j / (depth+1) ][ j % (depth+1) ] = 
+                    data_qubit_z_error[   j / (depth+1)       ][   j % (depth+1)       ]
+                    ^ data_qubit_z_error[   j / (depth+1)       ][ ( j % (depth+1) ) + 1 ]
+                    ^ data_qubit_z_error[ ( j / (depth+1) ) + 1 ][   j % (depth+1)       ]
+                    ^ data_qubit_z_error[ ( j / (depth+1) ) + 1 ][ ( j % (depth+1) ) + 1 ];
+            } else {
+                ancilla_qubit_value[ j / (depth+1) ][ j % (depth+1) ] = 
+                    data_qubit_z_error[   j / (depth+1)       ][   j % (depth+1)       ]
+                    ^ data_qubit_z_error[   j / (depth+1)       ][ ( j % (depth+1) ) + 1 ]
+                    ^ data_qubit_z_error[ ( j / (depth+1) ) + 1 ][   j % (depth+1)       ]
+                    ^ data_qubit_z_error[ ( j / (depth+1) ) + 1 ][ ( j % (depth+1) ) + 1 ];
+                j++;
+                ancilla_qubit_value[ j / (depth+1) ][ j % (depth+1) ] = 
+                    data_qubit_x_error[   j / (depth+1)       ][   j % (depth+1)       ]
+                    ^ data_qubit_x_error[   j / (depth+1)       ][ ( j % (depth+1) ) + 1 ]
+                    ^ data_qubit_x_error[ ( j / (depth+1) ) + 1 ][   j % (depth+1)       ]
+                    ^ data_qubit_x_error[ ( j / (depth+1) ) + 1 ][ ( j % (depth+1) ) + 1 ];
+            }
 		}
 
-        // For testing, comment out later:
-        for (int j = 0; j < depth + 2; j++) {
-            for (int k = 0; k < depth + 2; k++) {
-                fprintf(f, "%d,", ancilla_qubit_value[j][k]);
-            }
-        }
-        fprintf(f, "__,");
-        for (int j = 0; j < depth + 2; j++) {
-            for (int k = 0; k < depth + 2; k++) {
-                fprintf(f, "%d,", data_qubit_x_error[j][k]);
-            }
-        }
-        fprintf(f, "__,");
-        for (int j = 0; j < depth + 2; j++) {
-            for (int k = 0; k < depth + 2; k++) {
-                fprintf(f, "%d,", data_qubit_z_error[j][k]);
-            }
-        }
-/*
         // Output the ancilla qubit values in proper format
         int ancilla_value;
         for (int k=1; k < depth; k++) {
@@ -142,9 +137,9 @@ int main (int argc, char** argv) {
                 fprintf(f, "%d,", ancilla_value);
             }
         }
-*/
+
         // For printing label list:
-        int max_char = 14 * pow(depth, 2) + 3;
+        int max_char = 14 * (depth * depth) + 3;
         char label_list[max_char];
         strcpy(label_list, "\"[");
         char qubit_name[6];
@@ -173,12 +168,11 @@ int main (int argc, char** argv) {
             }
         }
         strcat(label_list, "]\"");
-        fprintf(f, "%s", label_list);
-
-        // Write out probability
-        fprintf(f, ",%g\n", probability);
+        fprintf(f, "%s\n", label_list);
 
 	}
+
+    fclose(f);
 
 	return 0;
 }
