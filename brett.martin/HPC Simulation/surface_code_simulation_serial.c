@@ -20,7 +20,7 @@ int main (int argc, char** argv) {
 
 	//Output:
 	//list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
-	FILE *f = fopen("D:/Documents/AFIT/Research/output.csv", "w+");
+	FILE *f = fopen("D:/Documents/AFIT/Research/output_all.csv", "w+");
 
     // Create CSV headers
     int ancilla = 0;
@@ -51,7 +51,7 @@ int main (int argc, char** argv) {
         }
     }
     fprintf(f, "Labels,");
-    fprintf(f, "Probability\n");
+    //fprintf(f, "Probability\n");
 
 	int num_data_qubits = pow(depth, 2);
 	int data_qubit_x_error[ depth + 2][ depth + 2 ];

@@ -180,23 +180,24 @@ int main ( int argc, char** argv ) {
     struct error_syndrome combinations[(num_data_qubits + 1) * (num_data_qubits + 1)][sample_space];
     memset(combinations, 0, sizeof(combinations));
 
+    // If all samples must contain at least one error, lower upper bound of random function to exclude that probability range
+    int upper_prob_bound = include_no_err ? 1.0 : (1.0 - prob_values[0].cumulative);
+
     // Begin main sim outer loop
 	for (int i = 0; i < num_samples; i++) {
+        printf("New iteration\n");
 
 		// initialize data_qubit_x_error and data_qubit_z_error (and others) to be full of FALSE (or 0) values
 		memset(data_qubit_x_error, 0, sizeof(data_qubit_x_error));
 		memset(data_qubit_z_error, 0, sizeof(data_qubit_z_error));
 		memset(ancilla_qubit_value, 0, sizeof(ancilla_qubit_value));
 
-        // If all samples must contain at least one error, lower upper bound of random function to exclude that probability range
-        int upper_prob_bound = include_no_err ? 1.0 : (1.0 - prob_values[0].cumulative);
-
         // Begin Fisher Yates Shuffle to generate data qubit x and z errors
         float rand_num;
         int sample_idx;
         int sample_found = 0;
         while(!sample_found) {
-            // Generate random number between 0 and 1
+            // Generate random number between 0 and 1 (or upper bound)
             rand_num = ((float) rand() / RAND_MAX) * upper_prob_bound;
             sample_idx = 0;
             for (int j = 0; j < (num_data_qubits + 1) * (num_data_qubits + 1); j++) {
