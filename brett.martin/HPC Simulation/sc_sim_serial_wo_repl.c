@@ -13,8 +13,6 @@
 #include <inttypes.h>
 
 #define TRI_SIZE 50
-#define X 0
-#define Z 1
 
 
 // Struct used in calculating and sorting all possible probabilities along with the number of samples per probability and the respective number of x and z errors
@@ -58,12 +56,6 @@ void fisher_yates( int array[], int size) {
 }
 
 
-// Generate or update error syndrome in the form of a bit string
-uint64_t generate_syndrome(uint64_t bit_string, int error_type, int error_idx) {
-    return error_type ? ((uint64_t)(1 << (error_idx + 1)) | bit_string) : ((uint64_t)(1 << error_idx) | bit_string);
-}
-
-
 // Begin main function
 int main ( int argc, char** argv ) {
 
@@ -97,11 +89,8 @@ int main ( int argc, char** argv ) {
     for (int row = 0; row < tri_size; row++) {  // This generates a ton of empty space, but it should be okay with such negligible size
         for (int col = 0; col <= row; col++)
         {
-            if (row == col || col == 0) {
-                pascal_triangle[row][col] = (unsigned long) 1;
-            } else {
-                pascal_triangle[row][col] = (unsigned long) pascal_triangle[row-1][col] + pascal_triangle[row-1][col-1];
-            }
+            if (row == col || col == 0) { pascal_triangle[row][col] = (unsigned long) 1; }
+            else { pascal_triangle[row][col] = (unsigned long) pascal_triangle[row-1][col] + pascal_triangle[row-1][col-1]; }
         }
     }
 
@@ -151,8 +140,6 @@ int main ( int argc, char** argv ) {
         }
     }
 
-    printf("\n");
-
     // Sort by ascending probability and calculate cumulative probs
     qsort((void*)prob_values, (num_data_qubits + 1) * (num_data_qubits + 1), sizeof(prob_values[0]), q_comp);
 
@@ -174,12 +161,12 @@ int main ( int argc, char** argv ) {
     memset(combinations, 0, sizeof(combinations));
 
     // If all samples must contain at least one error, lower upper bound of random function to exclude that probability range
-    float upper_prob_bound = include_no_err ? 1.0 : (prob_values[(num_data_qubits + 1) * (num_data_qubits + 1) - 1].cumulative - 0.01);
+    float upper_prob_bound = include_no_err ? 1.0 : (prob_values[(num_data_qubits + 1) * (num_data_qubits + 1) - 2].cumulative - 0.01);
     prob_values[(num_data_qubits + 1) * (num_data_qubits + 1) - 1].collected = include_no_err ? 0 : 1;
 
     // Begin main sim outer loop
 	for (int i = 0; i < num_samples; i++) {
-
+        printf("Iteration %d\n", i);
 		// initialize data_qubit_x_error and data_qubit_z_error (and others) to be full of FALSE (or 0) values
 		memset(data_qubit_x_error, 0, sizeof(data_qubit_x_error));
 		memset(data_qubit_z_error, 0, sizeof(data_qubit_z_error));
@@ -203,10 +190,10 @@ int main ( int argc, char** argv ) {
                 }
             }
         }
+        printf("1\n");
 
         // Initialize array of length (num_data_qubits) where each element in the array is equal to its index
         int rand_array[num_data_qubits];
-
         for (int j = 0; j < num_data_qubits; j++) { rand_array[j] = j; }
 
         // Perform n_x_err and n_z_err iterations of the Fisher Yates Shuffle on the array (where the selected value is at index 0)
@@ -285,8 +272,6 @@ int main ( int argc, char** argv ) {
             }
 		}
 
-        printf(" ... Done!\n");
-
         // Output the ancilla qubit values in proper format
         int ancilla_value;
         for (int k=1; k < depth; k++) {
@@ -335,14 +320,13 @@ int main ( int argc, char** argv ) {
                 }
             }
         }
+
         strcat(label_list, "]\"");
         fprintf(f, "%s\n", label_list);
-
-        //printf("\nAdded sample %d of %d. \n___________________________________________________________________\n", i, num_samples-1);
 
 	}
 
     fclose(f);
-
 	return 0;
+
 }

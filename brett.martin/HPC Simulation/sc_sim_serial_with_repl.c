@@ -27,6 +27,24 @@ int q_comp(const void *p1, const void *p2) {
     return 0;
 }
 
+
+// Helper function to the Fisher Yates Shuffle function, swaps values at two indices of an array
+void swap( int *first, int *second) {
+    int buf = *first;
+    *first = *second;
+    *second = buf;
+}
+
+
+// Fisher Yates Shuffle for randomizing an array of indices
+void fisher_yates( int array[], int size) {
+    for (int i = size - 1; i > 0; i--) {
+        int j = rand() % (i + 1);
+        swap(&array[i], &array[j]);
+    }
+}
+
+
 int main (int argc, char** argv) {
 
 	//Inputs:
@@ -35,9 +53,20 @@ int main (int argc, char** argv) {
 	const float p_x_error = 0.05;
 	const float p_z_error = 0.05;
 
+    // Set this to 1 if you want the sample set to include instances where no errors exist
+    int include_no_err = 0;
+
 	//Output:
 	//list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
-	FILE *f = fopen("D:/Documents/AFIT/Research/test.csv", "w+");
+	FILE *f = fopen("D:/Documents/AFIT/Research/v2samples.csv", "w+");
+
+    // Generate time-dependent seed for random number generation
+    srand(time(NULL));
+
+    const int num_data_qubits = depth * depth;
+    int data_qubit_x_error[ depth + 2][ depth + 2 ];
+    int data_qubit_z_error[ depth + 2  ][ depth + 2 ];
+    int ancilla_qubit_value[ depth + 1 ][ depth + 1 ];
 
     // Generate pascal's triangle for use in calculating binomial coefficients: O(n^2)
     // When referencing (n k) or "n choose k", just use: pascal_triangle[n][k]
@@ -57,7 +86,6 @@ int main (int argc, char** argv) {
 
     // Create CSV headers
     int ancilla = 0;
-    //fprintf(f, "Probability,");
     for (int k=1; k < depth; k++) {
         if (k%2 == 0) {
             fprintf(f, "Z%d,", ancilla);
@@ -86,71 +114,81 @@ int main (int argc, char** argv) {
     }
     fprintf(f, "Labels\n");
 
-	const int num_data_qubits = depth * depth;
-	int data_qubit_x_error[ depth + 2][ depth + 2 ];
-	int data_qubit_z_error[ depth + 2  ][ depth + 2 ];
-	int ancilla_qubit_value[ depth + 1 ][ depth + 1 ];
-
-	// Parallel block decomposition variables
-	uint64_t total_num_iter = pow(4, num_data_qubits);			// Total number of outer loop iterations
-
     // Determine the number of unique probabilities, the number of samples generated per probability
-    //float prob_values[(int) pow(num_data_qubits, 2)][2];
-    struct s_prob prob_values[num_data_qubits * num_data_qubits];
+    struct s_prob prob_values[(num_data_qubits + 1) * (num_data_qubits + 1)];
     memset(prob_values, 0, sizeof(prob_values));
 
     int prob_count = 0;
-    for (int i = 0; i < num_data_qubits; i++) {
-        for (int j = 0; j < num_data_qubits; j++) {
-            prob_values[prob_count].n_total_err = prob_count;
+    for (int i = 0; i < num_data_qubits + 1; i++) {
+        for (int j = 0; j < num_data_qubits + 1; j++) {
+            prob_values[prob_count].n_total_err = i + j;
             prob_values[prob_count].n_x_err = i;
             prob_values[prob_count].n_z_err = j;
             prob_values[prob_count].probability = (float) pow((1.0 - p_x_error), num_data_qubits - i) * pow((1.0 - p_z_error), num_data_qubits - j) * pow(p_x_error, i) * pow(p_z_error, j);
             prob_values[prob_count].count = (unsigned long) pascal_triangle[num_data_qubits][i] * pascal_triangle[num_data_qubits][j];
-            printf("At index %d: prob: %e, count: %lu, errors: %d x and %d z\n", prob_values[prob_count].n_total_err, prob_values[prob_count].probability, prob_values[prob_count].count, prob_values[prob_count].n_x_err, prob_values[prob_count].n_z_err);
             prob_count++;
         }
     }
 
-    printf("\n");
-
     // Sort by ascending probability
     // Also, include cumulative probs
-    qsort((void*)prob_values, num_data_qubits * num_data_qubits, sizeof(prob_values[0]), q_comp);
+    qsort((void*)prob_values, (num_data_qubits + 1) * (num_data_qubits + 1), sizeof(prob_values[0]), q_comp);
     prob_count = 0;
     float cum_prob = 0.0;
-    for (int i = 0; i < num_data_qubits; i++) {
-        for (int j = 0; j < num_data_qubits; j++) {
+    for (int i = 0; i < num_data_qubits + 1; i++) {
+        for (int j = 0; j < num_data_qubits + 1; j++) {
             cum_prob += (float)(prob_values[prob_count].probability * prob_values[prob_count].count);
             prob_values[prob_count].cumulative = cum_prob;
-            printf("Code with %d errors (%d x and %d z): prob: %e, count: %lu, cumulative prob: %e\n", prob_values[prob_count].n_total_err, prob_values[prob_count].n_x_err, prob_values[prob_count].n_z_err, prob_values[prob_count].probability, prob_values[prob_count].count, prob_values[prob_count].cumulative);
             prob_count++;
         } 
     }
-    
+
+    // If all samples must contain at least one error, lower upper bound of random function to exclude that probability range
+    float upper_prob_bound = include_no_err ? 1.0 : (prob_values[(num_data_qubits + 1) * (num_data_qubits + 1) - 2].cumulative - 0.01);
 
     // Begin main sim outer loop
-	for ( int i = 0; i < total_num_iter; i++ ) {
-
-		int errors = i;
-		double probability = 1.0;
+	for ( int i = 0; i < num_samples; i++ ) {
 
 		// initialize data_qubit_x_error and data_qubit_z_error to be full of FALSE (or 0) values
 		memset(data_qubit_x_error, 0, sizeof(data_qubit_x_error));
 		memset(data_qubit_z_error, 0, sizeof(data_qubit_z_error));
 		memset(ancilla_qubit_value, 0, sizeof(ancilla_qubit_value));
 
-		for ( int j = 0; j < num_data_qubits; j++ ) {
-			int this_error = errors % 2;
-			data_qubit_x_error[ ( j / depth ) + 1][ ( j % depth ) + 1 ] = this_error;
-			probability *= this_error ? p_x_error : (1.0 - p_x_error);
-			errors /= 2;
+        // Generate random number between 0 and 1 (or upper bound)
+        float rand_num = ((float) rand() / RAND_MAX) * upper_prob_bound;
+        int sample_idx = 0;
+        for (int j = 0; j < (num_data_qubits + 1) * (num_data_qubits + 1); j++) {
+            // Index of that element is going to point to the entry in the struct array that will tell me how many of each error will occur, but only if all samples have not been generated
+            if (prob_values[j].cumulative >= rand_num) {     // Check if the cumulative value is higher AND if there are enough samples to continue
+                sample_idx = j;
+                break;
+            }
+        }
 
-			this_error = errors % 2;
-			data_qubit_z_error[ ( j / depth ) + 1][ ( j % depth ) + 1 ] = this_error;
-			errors /= 2;
-			probability *= this_error ? p_z_error : (1.0 - p_z_error);
-		}
+        // Initialize array of length (num_data_qubits) where each element in the array is equal to its index
+        int rand_array[num_data_qubits];
+        for (int j = 0; j < num_data_qubits; j++) { rand_array[j] = j; }
+
+        // Perform n_x_err and n_z_err iterations of the Fisher Yates Shuffle on the array (where the selected value is at index 0)
+        // This will tell me the data qubits that have x errors
+        int qubit_idx;
+        for (int j = 0; j < prob_values[sample_idx].n_x_err; j++) {
+            while (1) {    // Ensure the same error doesn't get written twice
+                fisher_yates(rand_array, num_data_qubits);
+                qubit_idx = rand_array[0];
+                if (data_qubit_x_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] != 1) { break; }
+            }
+            data_qubit_x_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] = 1;
+        }
+
+        for (int j = 0; j < prob_values[sample_idx].n_z_err; j++) {
+            while (1) {
+                fisher_yates(rand_array, num_data_qubits);
+                qubit_idx = rand_array[0];
+                if (data_qubit_z_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] != 1) { break; }
+            }
+            data_qubit_z_error[ (qubit_idx/depth) + 1 ][ (qubit_idx%depth) + 1 ] = 1;
+        }
 
 		for ( int j = 0; j < pow( (depth + 1 ), 2) - 1; j++ ) {
             if ((j/(depth+1))%2 == 0) {
@@ -179,11 +217,6 @@ int main (int argc, char** argv) {
                     ^ data_qubit_x_error[ ( j / (depth+1) ) + 1 ][ ( j % (depth+1) ) + 1 ];
             }
 		}
-
-        // Write out probability
-        //fprintf(f, "%f,", probability);
-        //probList[i][0] = i;
-        //probList[i][1] = probability;
 
         // Output the ancilla qubit values in proper format
         int ancilla_value;
@@ -219,20 +252,14 @@ int main (int argc, char** argv) {
 		for (int k = 1; k < depth + 1; k++) {
             for (int j = depth; j > 0; j--) {
                 if (data_qubit_x_error[j][k] == 1) {
-                    if (first == 1) {
-                        first = 0;
-                    } else {
-                        strcat(label_list, ", ");
-                    }
+                    if (first) { first = 0; }
+                    else { strcat(label_list, ", "); }
                     sprintf(qubit_name, "'X%d%d'", (k-1), (3-j));
                     strcat(label_list, qubit_name);
                 }
                 if (data_qubit_z_error[j][k] == 1) {
-                    if (first == 1) {
-                        first = 0;
-                    } else {
-                        strcat(label_list, ", ");
-                    }
+                    if (first) { first = 0; }
+                    else { strcat(label_list, ", "); }
                     sprintf(qubit_name, "'Z%d%d'", (k-1), (3-j));
                     strcat(label_list, qubit_name);
                 }
