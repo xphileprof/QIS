@@ -60,7 +60,7 @@ void fisher_yates( int array[], int size) {
 int main ( int argc, char** argv ) {
 
 	//Inputs:
-	const int depth = 3;		// Or code distance
+	const int depth = 7;		// Or code distance
     const int num_samples = 1000;
 	const float p_x_error = 0.05;
 	const float p_z_error = 0.05;
@@ -70,7 +70,7 @@ int main ( int argc, char** argv ) {
 
 	//Output:
 	//list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
-	FILE *f = fopen("D:/Documents/AFIT/Research/v3samples.csv", "w+");
+	FILE *f = fopen("D:/Documents/AFIT/Research/REPO/QIS/brett.martin/Neural Network/SAMPLES/v3samples-d7-1000.csv", "w+");
 
     // Generate time-dependent seed for random number generation
     srand(time(NULL));
@@ -123,6 +123,8 @@ int main ( int argc, char** argv ) {
         }
     }
     fprintf(f, "Labels\n");
+    for (int i=0; i<(depth-1)*(depth+1); i++) { fprintf(f, "1,"); }
+    fprintf(f, "\"[]\"\n");
 
     // Determine the number of unique probabilities, the number of samples generated per probability
     struct s_prob prob_values[(num_data_qubits + 1) * (num_data_qubits + 1)];
@@ -153,19 +155,22 @@ int main ( int argc, char** argv ) {
         }
     }
 
-    int sample_space = (num_samples > pascal_triangle[num_data_qubits + 1][num_data_qubits / 2]) ? num_samples : pascal_triangle[num_data_qubits + 1][num_data_qubits / 2];
-
     // Consumes ~156.25 KB of heap space at max of depth=7, so this should be safe. Consider virtual mem if this becomes an issue when running on HPC
     // Will contain which error combinations exist for each possible probability. Searching it would take O(n) later on
-    struct error_syndrome combinations[(num_data_qubits + 1) * (num_data_qubits + 1)][sample_space];
+    struct error_syndrome combinations[num_samples];
     memset(combinations, 0, sizeof(combinations));
+    int combo_ctr = 0;
 
     // If all samples must contain at least one error, lower upper bound of random function to exclude that probability range
     float upper_prob_bound = include_no_err ? 1.0 : (prob_values[(num_data_qubits + 1) * (num_data_qubits + 1) - 2].cumulative - 0.01);
     prob_values[(num_data_qubits + 1) * (num_data_qubits + 1) - 1].collected = include_no_err ? 0 : 1;
 
+    int max_idx = (num_data_qubits + 1) * (num_data_qubits + 1) - 2;
+
     // Begin main sim outer loop
 	for (int i = 0; i < num_samples; i++) {
+
+        printf("Iteration %d \n", i);
 
 		// initialize data_qubit_x_error and data_qubit_z_error (and others) to be full of FALSE (or 0) values
 		memset(data_qubit_x_error, 0, sizeof(data_qubit_x_error));
@@ -186,6 +191,11 @@ int main ( int argc, char** argv ) {
                     sample_idx = j; 
                     prob_values[j].collected++;
                     sample_found = 1;
+                    // Check if collected is equal to the count and whether the cumulative is the upper bound. If so, set the new upper bound for rand_num
+                    if (max_idx == j && prob_values[j].count == prob_values[j].collected) {
+                        max_idx--;
+                        upper_prob_bound = prob_values[max_idx].cumulative - 0.01;
+                    }
                     break;
                 }
             }
@@ -226,17 +236,18 @@ int main ( int argc, char** argv ) {
             // Check list of error syndromes to find match
             // TODO: change this to not iterate over all elements
             int match_found = 0;
-            for (int j = 0; j < sample_space; j++) {
+            for (int j = 0; j < combo_ctr; j++) {
                 if (qubit_idx == (num_data_qubits + 1) * (num_data_qubits + 1) - 1) { break; }
-                if (combinations[sample_idx][j].x_syndrome == x_syndrome_bit_string && combinations[sample_idx][j].z_syndrome == z_syndrome_bit_string) {
+                if (combinations[j].x_syndrome == x_syndrome_bit_string && combinations[j].z_syndrome == z_syndrome_bit_string) {
                     match_found = 1;
                     break;
                 }
             }
 
             if (!match_found) {
-                combinations[sample_idx][prob_values[sample_idx].collected - 1].x_syndrome = x_syndrome_bit_string;
-                combinations[sample_idx][prob_values[sample_idx].collected - 1].z_syndrome = z_syndrome_bit_string;
+                combinations[combo_ctr].x_syndrome = x_syndrome_bit_string;
+                combinations[combo_ctr].z_syndrome = z_syndrome_bit_string;
+                combo_ctr++;
                 break;
             }
 
@@ -308,13 +319,13 @@ int main ( int argc, char** argv ) {
                 if (data_qubit_x_error[j][k] == 1) {
                     if (first == 1) { first = 0; }
                     else { strcat(label_list, ", "); }
-                    sprintf(qubit_name, "'X%d%d'", (k-1), (3-j));
+                    sprintf(qubit_name, "'X%d%d'", (k-1), (depth-j));
                     strcat(label_list, qubit_name);
                 }
                 if (data_qubit_z_error[j][k] == 1) {
                     if (first == 1) { first = 0; }
                     else { strcat(label_list, ", "); }
-                    sprintf(qubit_name, "'Z%d%d'", (k-1), (3-j));
+                    sprintf(qubit_name, "'Z%d%d'", (k-1), (depth-j));
                     strcat(label_list, qubit_name);
                 }
             }

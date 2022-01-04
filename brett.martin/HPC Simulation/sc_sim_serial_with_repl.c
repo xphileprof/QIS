@@ -49,7 +49,7 @@ int main (int argc, char** argv) {
 
 	//Inputs:
 	const int depth = 3;		// Or code distance
-    const int num_samples = 1000;
+    const int num_samples = 10000;
 	const float p_x_error = 0.05;
 	const float p_z_error = 0.05;
 
@@ -58,7 +58,7 @@ int main (int argc, char** argv) {
 
 	//Output:
 	//list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
-	FILE *f = fopen("D:/Documents/AFIT/Research/v2samples.csv", "w+");
+	FILE *f = fopen("D:/Documents/AFIT/Research/REPO/QIS/brett.martin/Neural Network/SAMPLES/v2samples-d3-10000.csv", "w+");
 
     // Generate time-dependent seed for random number generation
     srand(time(NULL));
@@ -113,6 +113,8 @@ int main (int argc, char** argv) {
         }
     }
     fprintf(f, "Labels\n");
+    for (int i=0; i<(depth-1)*(depth+1); i++) { fprintf(f, "1,"); }
+    fprintf(f, "\"[]\"\n");
 
     // Determine the number of unique probabilities, the number of samples generated per probability
     struct s_prob prob_values[(num_data_qubits + 1) * (num_data_qubits + 1)];
@@ -254,13 +256,13 @@ int main (int argc, char** argv) {
                 if (data_qubit_x_error[j][k] == 1) {
                     if (first) { first = 0; }
                     else { strcat(label_list, ", "); }
-                    sprintf(qubit_name, "'X%d%d'", (k-1), (3-j));
+                    sprintf(qubit_name, "'X%d%d'", (k-1), (depth-j));
                     strcat(label_list, qubit_name);
                 }
                 if (data_qubit_z_error[j][k] == 1) {
                     if (first) { first = 0; }
                     else { strcat(label_list, ", "); }
-                    sprintf(qubit_name, "'Z%d%d'", (k-1), (3-j));
+                    sprintf(qubit_name, "'Z%d%d'", (k-1), (depth-j));
                     strcat(label_list, qubit_name);
                 }
             }

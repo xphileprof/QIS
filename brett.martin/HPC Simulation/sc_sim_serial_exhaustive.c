@@ -20,7 +20,7 @@ int main (int argc, char** argv) {
 
 	//Output:
 	//list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
-	FILE *f = fopen("D:/Documents/AFIT/Research/output_all.csv", "w+");
+	FILE *f = fopen("D:/Documents/AFIT/Research/REPO/QIS/brett.martin/Neural Network/SAMPLES/ex-samples-d3.csv", "w+");
 
     // Create CSV headers
     int ancilla = 0;
@@ -153,7 +153,7 @@ int main (int argc, char** argv) {
                     } else {
                         strcat(label_list, ", ");
                     }
-                    sprintf(qubit_name, "'X%d%d'", (k-1), (3-j));
+                    sprintf(qubit_name, "'X%d%d'", (k-1), (depth-j));
                     strcat(label_list, qubit_name);
                 }
                 if (data_qubit_z_error[j][k] == 1) {
@@ -162,7 +162,7 @@ int main (int argc, char** argv) {
                     } else {
                         strcat(label_list, ", ");
                     }
-                    sprintf(qubit_name, "'Z%d%d'", (k-1), (3-j));
+                    sprintf(qubit_name, "'Z%d%d'", (k-1), (depth-j));
                     strcat(label_list, qubit_name);
                 }
             }
