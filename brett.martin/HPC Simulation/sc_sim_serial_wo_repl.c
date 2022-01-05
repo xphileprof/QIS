@@ -1,7 +1,6 @@
 /*	2d Lt Brett Martin
  *	Advisor: Dr. Laurence Merkle
- *	CSCE 656 - Parallel and Distributed Processing Algorithms
- *	Term project: parallel surface code simulation
+ *	Surface code simulation - random-sampled version without replacement
  **/
 
 #include <stdio.h>
@@ -170,8 +169,6 @@ int main ( int argc, char** argv ) {
     // Begin main sim outer loop
 	for (int i = 0; i < num_samples; i++) {
 
-        printf("Iteration %d \n", i);
-
 		// initialize data_qubit_x_error and data_qubit_z_error (and others) to be full of FALSE (or 0) values
 		memset(data_qubit_x_error, 0, sizeof(data_qubit_x_error));
 		memset(data_qubit_z_error, 0, sizeof(data_qubit_z_error));
@@ -234,7 +231,6 @@ int main ( int argc, char** argv ) {
             }
 
             // Check list of error syndromes to find match
-            // TODO: change this to not iterate over all elements
             int match_found = 0;
             for (int j = 0; j < combo_ctr; j++) {
                 if (qubit_idx == (num_data_qubits + 1) * (num_data_qubits + 1) - 1) { break; }

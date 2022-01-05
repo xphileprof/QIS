@@ -1,7 +1,6 @@
 /*	2d Lt Brett Martin
  *	Advisor: Dr. Laurence Merkle
- *	CSCE 656 - Parallel and Distributed Processing Algorithms
- *	Term project: parallel surface code simulation
+ *	Surface code simulation - random-sampled version with replacement
  **/
 
 #include <stdio.h>
@@ -14,7 +13,7 @@
 #define TRI_SIZE 50
 
 struct s_prob {
-    int n_x_err, n_z_err, n_total_err;
+    int n_x_err, n_z_err;
     float probability, cumulative;
     unsigned long count;    // TODO: Change to double to have higher range
 };
@@ -123,7 +122,6 @@ int main (int argc, char** argv) {
     int prob_count = 0;
     for (int i = 0; i < num_data_qubits + 1; i++) {
         for (int j = 0; j < num_data_qubits + 1; j++) {
-            prob_values[prob_count].n_total_err = i + j;
             prob_values[prob_count].n_x_err = i;
             prob_values[prob_count].n_z_err = j;
             prob_values[prob_count].probability = (float) pow((1.0 - p_x_error), num_data_qubits - i) * pow((1.0 - p_z_error), num_data_qubits - j) * pow(p_x_error, i) * pow(p_z_error, j);
@@ -133,8 +131,9 @@ int main (int argc, char** argv) {
     }
 
     // Sort by ascending probability
-    // Also, include cumulative probs
     qsort((void*)prob_values, (num_data_qubits + 1) * (num_data_qubits + 1), sizeof(prob_values[0]), q_comp);
+
+    // Add cumulative probabilities from least to most probable
     prob_count = 0;
     float cum_prob = 0.0;
     for (int i = 0; i < num_data_qubits + 1; i++) {

@@ -1,7 +1,6 @@
 /*	2d Lt Brett Martin
  *	Advisor: Dr. Laurence Merkle
- *	CSCE 656 - Parallel and Distributed Processing Algorithms
- *	Term project: parallel surface code simulation
+ *	Surface code simulation - exhaustive version
  **/
 
 #include <stdio.h>
@@ -51,7 +50,6 @@ int main (int argc, char** argv) {
         }
     }
     fprintf(f, "Labels,");
-    //fprintf(f, "Probability\n");
 
 	int num_data_qubits = pow(depth, 2);
 	int data_qubit_x_error[ depth + 2][ depth + 2 ];
@@ -59,8 +57,7 @@ int main (int argc, char** argv) {
 	int ancilla_qubit_value[ depth + 2 ][ depth + 2 ];
 
 	// Must include parallel block decomposition variables when converted to run on HPC
-    // TODO: Surface code of depth 7 exceeds this value. Find an alternate means to count the total number of loop iterations
-	uint64_t total_num_iter = (uint64_t) pow(4, num_data_qubits);			// Total number of outer loop iterations    
+	uint64_t total_num_iter = (uint64_t) pow(4, num_data_qubits);			// Total number of outer loop iterations
 
 	for ( int i = 0; i < total_num_iter; i++ ) {
 
