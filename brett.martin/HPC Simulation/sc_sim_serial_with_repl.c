@@ -46,9 +46,13 @@ void fisher_yates( int array[], int size) {
 
 int main (int argc, char** argv) {
 
+    // Execution time variables:
+    double exec_time = 0.0;
+    clock_t begin = clock();
+
 	//Inputs:
-	const int depth = 3;		// Or code distance
-    const int num_samples = 10000;
+	const int depth = 7;		// Or code distance
+    const int num_samples = 500000;
 	const float p_x_error = 0.05;
 	const float p_z_error = 0.05;
 
@@ -57,7 +61,7 @@ int main (int argc, char** argv) {
 
 	//Output:
 	//list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
-	FILE *f = fopen("D:/Documents/AFIT/Research/REPO/QIS/brett.martin/Neural Network/SAMPLES/v2samples-d3-10000.csv", "w+");
+	FILE *f = fopen("D:/Documents/AFIT/Research/REPO/QIS/brett.martin/Neural Network/TEST/v2samples-d7-500000.csv", "w+");
 
     // Generate time-dependent seed for random number generation
     srand(time(NULL));
@@ -270,6 +274,13 @@ int main (int argc, char** argv) {
         fprintf(f, "%s\n", label_list);
 
 	}
+
+    fclose(f);
+
+    clock_t end = clock();
+    exec_time += (double) (end - begin) / CLOCKS_PER_SEC;
+
+    printf("Samples collected for %d, %d in %f seconds", depth, num_samples, exec_time);
 
 	return 0;
 }

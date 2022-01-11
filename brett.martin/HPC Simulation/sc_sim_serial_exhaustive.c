@@ -12,6 +12,10 @@
 
 int main (int argc, char** argv) {
 
+    // Execution time variables:
+    double exec_time = 0.0;
+    clock_t begin = clock();
+
 	//Inputs:
 	int depth = 3;		// Or code distance
 	float p_x_error = 0.05;
@@ -49,7 +53,7 @@ int main (int argc, char** argv) {
 		    ancilla += 1;
         }
     }
-    fprintf(f, "Labels,");
+    fprintf(f, "Labels\n");
 
 	int num_data_qubits = pow(depth, 2);
 	int data_qubit_x_error[ depth + 2][ depth + 2 ];
@@ -170,6 +174,11 @@ int main (int argc, char** argv) {
 	}
 
     fclose(f);
+
+    clock_t end = clock();
+    exec_time += (double) (end - begin) / CLOCKS_PER_SEC;
+
+    printf("Samples collected for %d, %d in %f seconds", depth, total_num_iter, exec_time);
 
 	return 0;
 }
