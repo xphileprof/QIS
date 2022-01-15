@@ -109,7 +109,7 @@ int main ( int argc, char** argv ) {
     int data_qubit_z_error[ depth + 2  ][ depth + 2 ];
     int ancilla_qubit_value[ depth + 1 ][ depth + 1 ];
 
-    // Generate pascal's triangle for use in calculating binomial coefficients ( time O(n^2) )
+    // Generate pascal's triangle for use in calculating binomial coefficients ( time O(n^2), where n is the triangle size )
     // When referencing (n k) or "n choose k", just use: pascal_triangle[n][k]
     const int tri_size = 50;
     unsigned long pascal_triangle[ TRI_SIZE ][ TRI_SIZE ];

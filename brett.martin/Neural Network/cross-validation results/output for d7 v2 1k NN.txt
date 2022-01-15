@@ -1,0 +1,826 @@
+[200, 0]
+[0, 0]
+both b and c are zero
+[200, 0]
+[0, 0]
+both b and c are zero
+[181, 6]
+[12, 1]
+[186, 1]
+[0, 13]
+[191, 4]
+[5, 0]
+[195, 0]
+[0, 5]
+both b and c are zero
+[182, 4]
+[14, 0]
+[186, 0]
+[0, 14]
+both b and c are zero
+[191, 1]
+[7, 1]
+[192, 0]
+[0, 8]
+both b and c are zero
+[184, 7]
+[9, 0]
+[191, 0]
+[0, 9]
+both b and c are zero
+[181, 4]
+[11, 4]
+[185, 0]
+[0, 15]
+both b and c are zero
+[176, 16]
+[5, 3]
+[192, 0]
+[0, 8]
+both b and c are zero
+[178, 10]
+[10, 2]
+[188, 0]
+[1, 11]
+[189, 6]
+[5, 0]
+[195, 0]
+[0, 5]
+both b and c are zero
+[191, 2]
+[4, 3]
+[193, 0]
+[0, 7]
+both b and c are zero
+[186, 5]
+[8, 1]
+[191, 0]
+[0, 9]
+both b and c are zero
+[190, 2]
+[3, 5]
+[192, 0]
+[0, 8]
+both b and c are zero
+[180, 9]
+[6, 5]
+[189, 0]
+[0, 11]
+both b and c are zero
+[191, 0]
+[0, 9]
+both b and c are zero
+[191, 0]
+[0, 9]
+both b and c are zero
+[187, 0]
+[0, 13]
+both b and c are zero
+[187, 0]
+[0, 13]
+both b and c are zero
+[188, 5]
+[5, 2]
+[193, 0]
+[0, 7]
+both b and c are zero
+[184, 4]
+[9, 3]
+[188, 0]
+[0, 12]
+both b and c are zero
+[186, 4]
+[7, 3]
+[190, 0]
+[0, 10]
+both b and c are zero
+[183, 6]
+[8, 3]
+[189, 0]
+[0, 11]
+both b and c are zero
+[185, 4]
+[8, 3]
+[189, 0]
+[0, 11]
+both b and c are zero
+[178, 13]
+[7, 2]
+[191, 0]
+[0, 9]
+both b and c are zero
+[175, 11]
+[12, 2]
+[186, 0]
+[0, 14]
+both b and c are zero
+[185, 3]
+[11, 1]
+[188, 0]
+[0, 12]
+both b and c are zero
+[184, 2]
+[12, 2]
+[186, 0]
+[0, 14]
+both b and c are zero
+[182, 4]
+[12, 2]
+[186, 0]
+[0, 14]
+both b and c are zero
+[192, 2]
+[5, 1]
+[194, 0]
+[0, 6]
+both b and c are zero
+[187, 1]
+[9, 3]
+[188, 0]
+[0, 12]
+both b and c are zero
+[188, 0]
+[0, 12]
+both b and c are zero
+[188, 0]
+[0, 12]
+both b and c are zero
+[193, 0]
+[0, 7]
+both b and c are zero
+[193, 0]
+[0, 7]
+both b and c are zero
+[197, 0]
+[3, 0]
+[197, 0]
+[0, 3]
+both b and c are zero
+[193, 2]
+[4, 1]
+[195, 0]
+[0, 5]
+both b and c are zero
+[186, 2]
+[10, 2]
+[188, 0]
+[0, 12]
+both b and c are zero
+[185, 8]
+[5, 2]
+[193, 0]
+[0, 7]
+both b and c are zero
+[188, 3]
+[3, 6]
+[191, 0]
+[0, 9]
+both b and c are zero
+[185, 8]
+[6, 1]
+[193, 0]
+[0, 7]
+both b and c are zero
+[182, 10]
+[8, 0]
+[192, 0]
+[0, 8]
+both b and c are zero
+[188, 1]
+[9, 2]
+[189, 0]
+[0, 11]
+both b and c are zero
+[187, 5]
+[8, 0]
+[192, 0]
+[0, 8]
+both b and c are zero
+[186, 4]
+[8, 2]
+[190, 0]
+[0, 10]
+both b and c are zero
+[190, 4]
+[4, 2]
+[194, 0]
+[1, 5]
+[188, 0]
+[8, 4]
+[188, 0]
+[0, 12]
+both b and c are zero
+[192, 0]
+[0, 8]
+both b and c are zero
+[192, 0]
+[0, 8]
+both b and c are zero
+[191, 0]
+[0, 9]
+both b and c are zero
+[191, 0]
+[0, 9]
+both b and c are zero
+[189, 1]
+[9, 1]
+[190, 0]
+[0, 10]
+both b and c are zero
+[194, 1]
+[3, 2]
+[195, 0]
+[0, 5]
+both b and c are zero
+[194, 2]
+[4, 0]
+[196, 0]
+[0, 4]
+both b and c are zero
+[192, 0]
+[7, 1]
+[192, 0]
+[0, 8]
+both b and c are zero
+[196, 0]
+[4, 0]
+[196, 0]
+[0, 4]
+both b and c are zero
+[190, 0]
+[10, 0]
+[190, 0]
+[1, 9]
+[174, 13]
+[11, 2]
+[187, 0]
+[0, 13]
+both b and c are zero
+[191, 0]
+[0, 9]
+both b and c are zero
+[191, 0]
+[0, 9]
+both b and c are zero
+[183, 7]
+[5, 5]
+[190, 0]
+[0, 10]
+both b and c are zero
+[189, 0]
+[0, 11]
+both b and c are zero
+[189, 0]
+[0, 11]
+both b and c are zero
+[180, 11]
+[5, 4]
+[191, 0]
+[0, 9]
+both b and c are zero
+[188, 0]
+[0, 12]
+both b and c are zero
+[188, 0]
+[0, 12]
+both b and c are zero
+[190, 1]
+[5, 4]
+[191, 0]
+[0, 9]
+both b and c are zero
+[193, 1]
+[6, 0]
+[194, 0]
+[0, 6]
+both b and c are zero
+[185, 6]
+[8, 1]
+[191, 0]
+[0, 9]
+both b and c are zero
+[182, 2]
+[12, 4]
+[184, 0]
+[0, 16]
+both b and c are zero
+[184, 6]
+[8, 2]
+[190, 0]
+[0, 10]
+both b and c are zero
+[184, 6]
+[7, 3]
+[190, 0]
+[0, 10]
+both b and c are zero
+[187, 1]
+[9, 3]
+[188, 0]
+[0, 12]
+both b and c are zero
+[189, 4]
+[7, 0]
+[193, 0]
+[0, 7]
+both b and c are zero
+[191, 1]
+[8, 0]
+[192, 0]
+[0, 8]
+both b and c are zero
+[193, 3]
+[4, 0]
+[196, 0]
+[0, 4]
+both b and c are zero
+[189, 3]
+[5, 3]
+[192, 0]
+[0, 8]
+both b and c are zero
+[184, 7]
+[7, 2]
+[191, 0]
+[0, 9]
+both b and c are zero
+[181, 7]
+[10, 2]
+[188, 0]
+[0, 12]
+both b and c are zero
+[188, 2]
+[8, 2]
+[190, 0]
+[0, 10]
+both b and c are zero
+[184, 2]
+[13, 1]
+[186, 0]
+[0, 14]
+both b and c are zero
+[193, 1]
+[5, 1]
+[194, 0]
+[0, 6]
+both b and c are zero
+[187, 2]
+[10, 1]
+[189, 0]
+[0, 11]
+both b and c are zero
+[183, 6]
+[8, 3]
+[189, 0]
+[0, 11]
+both b and c are zero
+[184, 1]
+[8, 7]
+[185, 0]
+[0, 15]
+both b and c are zero
+[189, 3]
+[5, 3]
+[192, 0]
+[0, 8]
+both b and c are zero
+[186, 6]
+[6, 2]
+[192, 0]
+[0, 8]
+both b and c are zero
+[193, 0]
+[5, 2]
+[193, 0]
+[0, 7]
+both b and c are zero
+[192, 2]
+[6, 0]
+[194, 0]
+[0, 6]
+both b and c are zero
+[188, 2]
+[10, 0]
+[190, 0]
+[0, 10]
+both b and c are zero
+[180, 6]
+[12, 2]
+[186, 0]
+[0, 14]
+both b and c are zero
+[190, 3]
+[4, 3]
+[193, 0]
+[0, 7]
+both b and c are zero
+[189, 1]
+[6, 4]
+[190, 0]
+[0, 10]
+both b and c are zero
+[181, 3]
+[10, 6]
+[184, 0]
+[0, 16]
+both b and c are zero
+[189, 2]
+[8, 1]
+[191, 0]
+[0, 9]
+both b and c are zero
+[186, 4]
+[10, 0]
+[190, 0]
+[0, 10]
+both b and c are zero
+[189, 4]
+[6, 1]
+[193, 0]
+[0, 7]
+both b and c are zero
+[190, 2]
+[7, 1]
+[192, 0]
+[0, 8]
+both b and c are zero
+[185, 2]
+[10, 3]
+[187, 0]
+[0, 13]
+both b and c are zero
+[188, 2]
+[6, 4]
+[190, 0]
+[0, 10]
+both b and c are zero
+[186, 6]
+[6, 2]
+[192, 0]
+[0, 8]
+both b and c are zero
+[187, 1]
+[9, 3]
+[188, 0]
+[0, 12]
+both b and c are zero
+[186, 4]
+[9, 1]
+[190, 0]
+[0, 10]
+both b and c are zero
+[180, 14]
+[5, 1]
+[194, 0]
+[0, 6]
+both b and c are zero
+[188, 0]
+[0, 12]
+both b and c are zero
+[188, 0]
+[0, 12]
+both b and c are zero
+[186, 10]
+[4, 0]
+[196, 0]
+[0, 4]
+both b and c are zero
+[195, 0]
+[0, 5]
+both b and c are zero
+[195, 0]
+[0, 5]
+both b and c are zero
+[184, 7]
+[7, 2]
+[191, 0]
+[0, 9]
+both b and c are zero
+[190, 0]
+[0, 10]
+both b and c are zero
+[190, 0]
+[0, 10]
+both b and c are zero
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+Average scores for all folds of MWPM:
+> Accuracy: 0.9683164983164976 (+- 0.000886679736179413)
+> F1: 0.6673143248115379(+- 0.004990978121823208)
+> Time: 41.9329687 (+- 0.3696491577769018)
+Average scores for all folds of PLUT:
+> Accuracy: 0.9542324854975464 (+- 0.0005492690514977369)
+> F1: 0.003497979876854912(+- 0.0026681831293092068)
+> Time: 0.009001933333333335 (+- 0.0008165374224260771)
+Average scores for all folds of NN:
+> Accuracy: 0.9541683512424376 (+- 0.0005658810353028808)
+> F1: 0.0(+- 0.0)
+> Time: 0.0590134 (+- 0.0016334830598040073)
+> AUC for class : 0.0015105740181268756 (+- 0.0)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class X00: 0.48294523654723437 (+- 0.020769267543969412)
+X^2 for MWPM and NN: 2.7222222222222223
+X^2 for PLUT and NN: 0.0
+> AUC for class X01: 0.573620880163539 (+- 0.11623533159947569)
+X^2 for MWPM and NN: 0.4444444444444444
+X^2 for PLUT and NN: 0
+> AUC for class X02: 0.5910714612344736 (+- 0.017314444828859375)
+X^2 for MWPM and NN: 6.722222222222222
+X^2 for PLUT and NN: 0
+> AUC for class X03: 0.6633627455462595 (+- 0.09185227087817743)
+X^2 for MWPM and NN: 6.125
+X^2 for PLUT and NN: 0
+> AUC for class X04: 0.6894233787250831 (+- 0.06900006236238214)
+X^2 for MWPM and NN: 0.5625
+X^2 for PLUT and NN: 0
+> AUC for class X05: 0.5444125159831691 (+- 0.10242732188150588)
+X^2 for MWPM and NN: 4.266666666666667
+X^2 for PLUT and NN: 0
+> AUC for class X06: 0.521921836872624 (+- 0.06579648641591218)
+X^2 for MWPM and NN: 4.761904761904762
+X^2 for PLUT and NN: 0
+> AUC for class X10: 0.6136089144701398 (+- 0.044539085259945085)
+X^2 for MWPM and NN: 0.05
+X^2 for PLUT and NN: 4.0
+> AUC for class X11: 0.6266147505534297 (+- 0.11732691023127995)
+X^2 for MWPM and NN: 0.0
+X^2 for PLUT and NN: 0
+> AUC for class X12: 0.6295262368510283 (+- 0.06489357516925244)
+X^2 for MWPM and NN: 1.5
+X^2 for PLUT and NN: 0
+> AUC for class X13: 0.7132704425065796 (+- 0.019336838214833025)
+X^2 for MWPM and NN: 1.2307692307692308
+X^2 for PLUT and NN: 0
+> AUC for class X14: 0.7722875521467873 (+- 0.07736569758148189)
+X^2 for MWPM and NN: 0.8
+X^2 for PLUT and NN: 0
+> AUC for class X15: 0.688378798615583 (+- 0.07209185454668117)
+X^2 for MWPM and NN: 0.26666666666666666
+X^2 for PLUT and NN: 0
+> AUC for class X16: 0.5374599688375424 (+- 0.06476995077999106)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class X20: 0.582052508744526 (+- 0.05841995928959184)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class X21: 0.638523694708221 (+- 0.06896877246942872)
+X^2 for MWPM and NN: 0.1
+X^2 for PLUT and NN: 0
+> AUC for class X22: 0.6616481005208187 (+- 0.04227674607923023)
+X^2 for MWPM and NN: 2.769230769230769
+X^2 for PLUT and NN: 0
+> AUC for class X23: 0.673884781529806 (+- 0.060194129051517845)
+X^2 for MWPM and NN: 1.4545454545454546
+X^2 for PLUT and NN: 0
+> AUC for class X24: 0.6691943833027344 (+- 0.08280944731282736)
+X^2 for MWPM and NN: 0.6428571428571429
+X^2 for PLUT and NN: 0
+> AUC for class X25: 0.6516209969398755 (+- 0.030812737682848458)
+X^2 for MWPM and NN: 2.0833333333333335
+X^2 for PLUT and NN: 0
+> AUC for class X26: 0.5600047314179308 (+- 0.055761095115738596)
+X^2 for MWPM and NN: 1.25
+X^2 for PLUT and NN: 0
+> AUC for class X30: 0.5396766818065339 (+- 0.04813928493637963)
+X^2 for MWPM and NN: 0.17391304347826086
+X^2 for PLUT and NN: 0
+> AUC for class X31: 0.6482394844937028 (+- 0.03357264649486786)
+X^2 for MWPM and NN: 5.785714285714286
+X^2 for PLUT and NN: 0
+> AUC for class X32: 0.6455291998499837 (+- 0.053811690682839294)
+X^2 for MWPM and NN: 8.642857142857142
+X^2 for PLUT and NN: 0
+> AUC for class X33: 0.6716246471042515 (+- 0.040046155542277584)
+X^2 for MWPM and NN: 5.0625
+X^2 for PLUT and NN: 0
+> AUC for class X34: 0.6823789792305535 (+- 0.05206660736456595)
+X^2 for MWPM and NN: 2.2857142857142856
+X^2 for PLUT and NN: 0
+> AUC for class X35: 0.6052416987038708 (+- 0.11881370310998601)
+X^2 for MWPM and NN: 8.1
+X^2 for PLUT and NN: 0
+> AUC for class X36: 0.5122486740492466 (+- 0.03925850626327867)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class X40: 0.5542458620192366 (+- 0.061568132556102856)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class X41: 0.5610356841832299 (+- 0.07779052848583944)
+X^2 for MWPM and NN: 5.333333333333333
+X^2 for PLUT and NN: 0
+> AUC for class X42: 0.6656273492356006 (+- 0.0538830976704194)
+X^2 for MWPM and NN: 1.5
+X^2 for PLUT and NN: 0
+> AUC for class X43: 0.5686950048709946 (+- 0.11569071399965214)
+X^2 for MWPM and NN: 6.75
+X^2 for PLUT and NN: 0
+> AUC for class X44: 0.663938646642365 (+- 0.10585249477726898)
+X^2 for MWPM and NN: 0.3076923076923077
+X^2 for PLUT and NN: 0
+> AUC for class X45: 0.6312228390622788 (+- 0.08077611744064546)
+X^2 for MWPM and NN: 0.16666666666666666
+X^2 for PLUT and NN: 0
+> AUC for class X46: 0.3922506020305594 (+- 0.02619176827692118)
+X^2 for MWPM and NN: 0.07142857142857142
+X^2 for PLUT and NN: 0
+> AUC for class X50: 0.5112189463439244 (+- 0.01651768141291875)
+X^2 for MWPM and NN: 0.05555555555555555
+X^2 for PLUT and NN: 0
+> AUC for class X51: 0.6482940428054774 (+- 0.10427625099378304)
+X^2 for MWPM and NN: 8.1
+X^2 for PLUT and NN: 0
+> AUC for class X52: 0.6624608254718186 (+- 0.01775257503475634)
+X^2 for MWPM and NN: 1.2307692307692308
+X^2 for PLUT and NN: 0
+> AUC for class X53: 0.5623086297623335 (+- 0.026520122415990017)
+X^2 for MWPM and NN: 2.0833333333333335
+X^2 for PLUT and NN: 0
+> AUC for class X54: 0.6801927566930989 (+- 0.03027903716700394)
+X^2 for MWPM and NN: 0.125
+X^2 for PLUT and NN: 4.0
+> AUC for class X55: 0.4514814782847196 (+- 0.03382789253005669)
+X^2 for MWPM and NN: 10.125
+X^2 for PLUT and NN: 0
+> AUC for class X56: 0.45186044949043974 (+- 0.07167616932404952)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class X60: 0.5827879895595457 (+- 0.06435369856270598)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class X61: 0.6734651812593019 (+- 0.0864734700920989)
+X^2 for MWPM and NN: 8.1
+X^2 for PLUT and NN: 0
+> AUC for class X62: 0.6999925272746915 (+- 0.08119501439029154)
+X^2 for MWPM and NN: 2.25
+X^2 for PLUT and NN: 0
+> AUC for class X63: 0.7210499442327855 (+- 0.06976026222134203)
+X^2 for MWPM and NN: 1.5
+X^2 for PLUT and NN: 0
+> AUC for class X64: 0.6432546340792387 (+- 0.028120855623535092)
+X^2 for MWPM and NN: 9.142857142857142
+X^2 for PLUT and NN: 0
+> AUC for class X65: 0.7107005063901616 (+- 0.033603185700318845)
+X^2 for MWPM and NN: 6.25
+X^2 for PLUT and NN: 0
+> AUC for class X66: 0.5832737302143247 (+- 0.0650484773638653)
+X^2 for MWPM and NN: 12.1
+X^2 for PLUT and NN: 4.0
+> AUC for class Z00: 0.5348003859772446 (+- 0.1331493987303468)
+X^2 for MWPM and NN: 0.041666666666666664
+X^2 for PLUT and NN: 0
+> AUC for class Z01: 0.6016289134564451 (+- 0.044706660227883)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class Z02: 0.5153102226215432 (+- 0.11223938556694095)
+X^2 for MWPM and NN: 0.08333333333333333
+X^2 for PLUT and NN: 0
+> AUC for class Z03: 0.525258349068272 (+- 0.022792165272337527)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class Z04: 0.54876937981642 (+- 0.09552743532182226)
+X^2 for MWPM and NN: 1.5625
+X^2 for PLUT and NN: 0
+> AUC for class Z05: 0.5717232191288796 (+- 0.01847396931828152)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class Z06: 0.5746845170080527 (+- 0.09385977001761414)
+X^2 for MWPM and NN: 4.166666666666667
+X^2 for PLUT and NN: 0
+> AUC for class Z10: 0.6874848599113306 (+- 0.13591297563325933)
+X^2 for MWPM and NN: 5.142857142857143
+X^2 for PLUT and NN: 0
+> AUC for class Z11: 0.5855750857225379 (+- 0.08388700474648307)
+X^2 for MWPM and NN: 0.6428571428571429
+X^2 for PLUT and NN: 0
+> AUC for class Z12: 0.5500443890593613 (+- 0.08505249963860084)
+X^2 for MWPM and NN: 8.642857142857142
+X^2 for PLUT and NN: 0
+> AUC for class Z13: 0.5968687233353677 (+- 0.005165320290250881)
+X^2 for MWPM and NN: 0.6428571428571429
+X^2 for PLUT and NN: 0
+> AUC for class Z14: 0.6640529864564707 (+- 0.16054148781565675)
+X^2 for MWPM and NN: 0.3076923076923077
+X^2 for PLUT and NN: 0
+> AUC for class Z15: 0.6257460970346341 (+- 0.03496998032119692)
+X^2 for MWPM and NN: 8.1
+X^2 for PLUT and NN: 0
+> AUC for class Z16: 0.6963675618168167 (+- 0.03493165888208301)
+X^2 for MWPM and NN: 1.4545454545454546
+X^2 for PLUT and NN: 0
+> AUC for class Z20: 0.6409007198066771 (+- 0.04067901182660272)
+X^2 for MWPM and NN: 7.111111111111111
+X^2 for PLUT and NN: 0
+> AUC for class Z21: 0.45984714173568664 (+- 0.07342547801531858)
+X^2 for MWPM and NN: 0.5714285714285714
+X^2 for PLUT and NN: 0
+> AUC for class Z22: 0.586153991127022 (+- 0.022041793071722143)
+X^2 for MWPM and NN: 1.125
+X^2 for PLUT and NN: 0
+> AUC for class Z23: 0.5866173637452078 (+- 0.13542841212772788)
+X^2 for MWPM and NN: 0.07142857142857142
+X^2 for PLUT and NN: 0
+> AUC for class Z24: 0.5655619270001737 (+- 0.07621192016219798)
+X^2 for MWPM and NN: 0.9411764705882353
+X^2 for PLUT and NN: 0
+> AUC for class Z25: 0.605541059661539 (+- 0.051912947830936515)
+X^2 for MWPM and NN: 4.9
+X^2 for PLUT and NN: 0
+> AUC for class Z26: 0.5980512807912189 (+- 0.018527430445980535)
+X^2 for MWPM and NN: 9.6
+X^2 for PLUT and NN: 0
+> AUC for class Z30: 0.5924471061278235 (+- 0.1483893595865992)
+X^2 for MWPM and NN: 4.166666666666667
+X^2 for PLUT and NN: 0
+> AUC for class Z31: 0.6558527630733101 (+- 0.038352415011540554)
+X^2 for MWPM and NN: 6.75
+X^2 for PLUT and NN: 0
+> AUC for class Z32: 0.5785519818049821 (+- 0.049232371738420655)
+X^2 for MWPM and NN: 0.6428571428571429
+X^2 for PLUT and NN: 0
+> AUC for class Z33: 0.6621349469882927 (+- 0.04473127294903886)
+X^2 for MWPM and NN: 7.111111111111111
+X^2 for PLUT and NN: 0
+> AUC for class Z34: 0.701602810288628 (+- 0.07139910599320609)
+X^2 for MWPM and NN: 1.125
+X^2 for PLUT and NN: 0
+> AUC for class Z35: 0.5905113821908676 (+- 0.05186987500424858)
+X^2 for MWPM and NN: 0.08333333333333333
+X^2 for PLUT and NN: 0
+> AUC for class Z36: 0.6828550702516608 (+- 0.039057941741547156)
+X^2 for MWPM and NN: 7.2
+X^2 for PLUT and NN: 0
+> AUC for class Z40: 0.6725421086808042 (+- 0.11877931470105295)
+X^2 for MWPM and NN: 3.125
+X^2 for PLUT and NN: 0
+> AUC for class Z41: 0.5273609447106852 (+- 0.06488077921941751)
+X^2 for MWPM and NN: 6.75
+X^2 for PLUT and NN: 0
+> AUC for class Z42: 0.6115331822341804 (+- 0.013268429264431178)
+X^2 for MWPM and NN: 2.7222222222222223
+X^2 for PLUT and NN: 0
+> AUC for class Z43: 0.6129593293343809 (+- 0.15222741354129202)
+X^2 for MWPM and NN: 0.5714285714285714
+X^2 for PLUT and NN: 0
+> AUC for class Z44: 0.6540005197989344 (+- 0.11577832954374438)
+X^2 for MWPM and NN: 5.142857142857143
+X^2 for PLUT and NN: 0
+> AUC for class Z45: 0.7297835814307182 (+- 0.03676057059052998)
+X^2 for MWPM and NN: 4.923076923076923
+X^2 for PLUT and NN: 0
+> AUC for class Z46: 0.6671226178208691 (+- 0.06948486517642821)
+X^2 for MWPM and NN: 4.9
+X^2 for PLUT and NN: 0
+> AUC for class Z50: 0.7386915408706134 (+- 0.1063164500819982)
+X^2 for MWPM and NN: 3.5
+X^2 for PLUT and NN: 0
+> AUC for class Z51: 0.6418979800244556 (+- 0.0858406509546976)
+X^2 for MWPM and NN: 0.9
+X^2 for PLUT and NN: 0
+> AUC for class Z52: 0.7191837762733084 (+- 0.06927810774339667)
+X^2 for MWPM and NN: 4.0
+X^2 for PLUT and NN: 0
+> AUC for class Z53: 0.5759743028155117 (+- 0.08253530078979518)
+X^2 for MWPM and NN: 6.75
+X^2 for PLUT and NN: 0
+> AUC for class Z54: 0.5778609485189768 (+- 0.09842197431982792)
+X^2 for MWPM and NN: 3.125
+X^2 for PLUT and NN: 0
+> AUC for class Z55: 0.7009234350599572 (+- 0.07127847948382085)
+X^2 for MWPM and NN: 0.08333333333333333
+X^2 for PLUT and NN: 0
+> AUC for class Z56: 0.7035432092342849 (+- 0.08852324658570296)
+X^2 for MWPM and NN: 8.1
+X^2 for PLUT and NN: 0
+> AUC for class Z60: 0.6931030648031151 (+- 0.012079268671956977)
+X^2 for MWPM and NN: 2.769230769230769
+X^2 for PLUT and NN: 0
+> AUC for class Z61: 0.5905293826860547 (+- 0.04005194131306749)
+X^2 for MWPM and NN: 3.3684210526315788
+X^2 for PLUT and NN: 0
+> AUC for class Z62: 0.620414329921636 (+- 0.029300505778752)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class Z63: 0.5589988407688986 (+- 0.09049000843453928)
+X^2 for MWPM and NN: 1.7857142857142858
+X^2 for PLUT and NN: 0
+> AUC for class Z64: 0.5287943101068416 (+- 0.12633788585782418)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+> AUC for class Z65: 0.4858119253045139 (+- 0.03931673390897505)
+X^2 for MWPM and NN: 0.07142857142857142
+X^2 for PLUT and NN: 0
+> AUC for class Z66: 0.5962131565002936 (+- 0.03168285705880586)
+X^2 for MWPM and NN: 0
+X^2 for PLUT and NN: 0
+###################################################################################
+TOTAL F1 NN: [0.0, 0.0, 0.0]
+TOTAL F1 PLUT: [0.0, 0.004021447721179625, 0.006472491909385113]
+TOTAL F1 MWPM: [0.6741935483870968, 0.6652429257875067, 0.6625065002600103]
+TOTAL ACC NN: [0.954423725605011, 0.9546974897384644, 0.9533838383838373]
+TOTAL ACC PLUT: [0.9544237556285764, 0.9547888523792154, 0.9534848484848475]
+TOTAL ACC MWPM: [0.9693939393939387, 0.9683333333333326, 0.9672222222222214]
+TOTAL TIME NN: [0.061014, 0.0570128, 0.0590134]
+TOTAL TIME PLUT: [0.008002, 0.0100021, 0.0090017]
+TOTAL TIME MWPM: [41.6732814, 41.669896800000025, 42.45572789999999]
+------------------------------------------------------------------------
