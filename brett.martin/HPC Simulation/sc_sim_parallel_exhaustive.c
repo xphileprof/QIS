@@ -53,12 +53,15 @@ int main (int argc, char** argv) {
     MPI_File fh;
 
     char buf[i_max_char];
-    MPI_Offset offset = (MPI_Offset) (iproc * block_size * strlen(buf) * sizeof(char));
+    MPI_Offset offset = (MPI_Offset) (iproc * block_size * i_max_char);
 
     //Output:
     //list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
-    MPI_File_open(MPI_COMM_SELF, "testfile.csv", MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &fh);
+    MPI_File_open(MPI_COMM_WORLD, "testfile.csv", MPI_MODE_CREATE | MPI_MODE_RDWR, MPI_INFO_NULL, &fh);
+    //MPI_File_set_size(fh, filesize);
     MPI_File_set_view(fh, offset, MPI_CHAR, MPI_CHAR, "native", MPI_INFO_NULL);
+    printf("(%d) Writing to file...\n", iproc);
+    printf("\nRank: (%d), Offset: %d\n", iproc, (int)offset);
 
     printf("Process %d range: %d to %d \n", iproc, iter_first, iter_last);
 
@@ -67,6 +70,8 @@ int main (int argc, char** argv) {
 
 		// Exclude other processes outside of block
 		//if (i >= total_num_iter || (iproc >= iter_first && iproc < iter_last)) { continue; }
+        //if(iproc != 0) {printf("Iter: %d\n", i);}
+        //else { continue; }
 
         int errors = i;
         double probability = 1.0;
@@ -180,7 +185,7 @@ int main (int argc, char** argv) {
         }
         strcat(label_list, "]\"");
 
-        MPI_File_write_all(fh, label_list, strlen(label_list) * sizeof(char), MPI_CHAR, MPI_STATUS_IGNORE);
+        MPI_File_write_all(fh, label_list, strlen(label_list), MPI_CHAR, MPI_STATUS_IGNORE);
 
 	}
 
