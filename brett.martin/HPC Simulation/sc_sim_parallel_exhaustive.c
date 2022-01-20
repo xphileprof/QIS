@@ -52,54 +52,14 @@ int main (int argc, char** argv) {
     MPI_Status status;
     MPI_File fh;
 
-    const char* buf[i_max_char];
+    char buf[i_max_char];
+    MPI_Offset offset = (MPI_Offset) (iproc * block_size * strlen(buf) * sizeof(char))
 
     //Output:
     //list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
-    //FILE *f = fopen("/tmp/brett/output.txt", "a");	// Change directory
     MPI_File_open(MPI_COMM_SELF, "testfile.csv", MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &fh);
-    MPI_File_set_view(fh, iproc * block_size * sizeof(buf), MPI_CHAR, MPI_CHAR, 'native', MPI_INFO_NULL);
+    MPI_File_set_view(fh, offset, MPI_CHAR, MPI_CHAR, "native", MPI_INFO_NULL);
 
-    if(iproc == 0) {
-        char headers[i_max_char];
-        // Create CSV headers
-        char h_anc[4];
-        int ancilla = 0;
-        for (int k=1; k < depth; k++) {
-            if (k%2 == 0) {
-                sprintf(h_anc, "Z%d,", ancilla);
-                strcat(headers, h_anc);
-                ancilla++;
-            }
-            for (int j=depth-1; j > 0; j--) {
-                if (k == 1 && j%2 == 0) {
-                    sprintf(h_anc, "X%d,", ancilla);
-                    strcat(headers, h_anc);
-                    ancilla++;
-                } else if (k == (depth - 1) && j%2 == 1) {
-                    sprintf(h_anc, "X%d,", ancilla);
-                    strcat(headers, h_anc);
-                    ancilla++;
-                }
-                if ((j+k)%2 == 0) {
-                    sprintf(h_anc, "X%d,", ancilla);
-                    strcat(headers, h_anc);
-                    ancilla++;
-                } else {
-                    sprintf(h_anc, "Z%d,", ancilla);
-                    strcat(headers, h_anc);
-                    ancilla++;
-                }
-            }
-            if (k%2 == 1) {
-                sprintf(h_anc, "Z%d,", ancilla);
-                strcat(headers, h_anc);
-                ancilla++;
-            }
-        }
-        strcat(headers, "Labels");
-        MPI_File_write(fh, headers, strlen(headers) * sizeof(char), MPI_CHAR, MPI_STATUS_IGNORE);
-    }
 
 	for ( int i = iter_first; i < iter_last; i++ ) {
 
@@ -218,7 +178,7 @@ int main (int argc, char** argv) {
         }
         strcat(label_list, "]\"");
 
-        MPI_File_write(fh, label_list, strlen(label_list) * sizeof(char), MPI_CHAR, MPI_STATUS_IGNORE);
+        MPI_File_write_all(fh, label_list, strlen(label_list) * sizeof(char), MPI_CHAR, MPI_STATUS_IGNORE);
 
 	}
 
