@@ -53,18 +53,20 @@ int main (int argc, char** argv) {
     MPI_File fh;
 
     char buf[i_max_char];
-    MPI_Offset offset = (MPI_Offset) (iproc * block_size * strlen(buf) * sizeof(char))
+    MPI_Offset offset = (MPI_Offset) (iproc * block_size * strlen(buf) * sizeof(char));
 
     //Output:
     //list of records in which each possible combination of data qubit errors is associated with the resulting ancilla qubit values (may be probabilistic), along with the probability of the combination of data qubit errors (and measurement errors?)
     MPI_File_open(MPI_COMM_SELF, "testfile.csv", MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &fh);
     MPI_File_set_view(fh, offset, MPI_CHAR, MPI_CHAR, "native", MPI_INFO_NULL);
 
+    printf("Process %d range: %d to %d \n", iproc, iter_first, iter_last);
+
 
 	for ( int i = iter_first; i < iter_last; i++ ) {
 
 		// Exclude other processes outside of block
-		if (i >= total_num_iter || (iproc >= iter_first && iproc < iter_last)) { continue; }
+		//if (i >= total_num_iter || (iproc >= iter_first && iproc < iter_last)) { continue; }
 
         int errors = i;
         double probability = 1.0;
@@ -187,7 +189,7 @@ int main (int argc, char** argv) {
     if (iproc == 0) {
         clock_t end = clock();
         exec_time += (double) (end - begin) / CLOCKS_PER_SEC;
-        printf("Samples collected for %d, %d in %f seconds\n", depth, num_samples, exec_time);
+        printf("Samples collected for depth %d, %d in %f seconds on %d processes\n", depth, total_num_iter, exec_time, nproc);
     }
 
 	MPI_Finalize();
